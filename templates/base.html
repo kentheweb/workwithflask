@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
+</head>
+<body>
+    <nav>
+        <ul>
+            {%if not 'email' in session%}
+            <li><a href="{{ url_for('login')}}">login</a></li>
+            {%else%}
+            <li><a href="{{ url_for('logout')}}">logout</a></li>
+            {%endif%}
+            <li><a href="{{url_for('home')}}">Home</a></li>
+            <li><a href="">About</a></li>
+            <li><a href="">Services</a></li>
+        </ul>
+    </nav>
+    {% block body%}
+    {% endblock body%}
+</body>
+</html>
