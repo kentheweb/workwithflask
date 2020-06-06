@@ -2,60 +2,14 @@
     box-sizing: border-box;
     padding: 0px;
     margin: 0px;
-    font-family: san-serif;
-    font-size: 18px;
-}
-
-
-input[type='submit']{
-    border-style: none;
-    background-color: orange;
-    border-radius: 4px;
-    text-align: center;
-    padding-top: 6px;
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-bottom: 1px;
-    margin-left: 3px;
-}
-
-input[type='text']{
-    width: 50%;
-    height: 20%;
-    padding: 6px 2px 0px 0px;
-
-}
-
-section{
-    display: flex;
-}
-
-.container1{
-    width: 40%;
-    border-right: 1px solid blue;
-    height: 90vh;
-
-}
-
-.container{
-    width: 60%;
-    margin-left: 5px;
-}
-
-#form{
-    position: fixed;
-    top: 95vh;
-    width: 100%;
-}
-
-body{
-overflowX: hidden;
-
+    font-family: Old English Text MT;
+    font-size: 17px;
+    letter-spacing: 1px;
 }
 
 nav{
     height:10vh;
-    background-color: orange;
+    background-color: green;
 }
 
 nav ul{
@@ -66,8 +20,26 @@ nav ul{
     align-items: center;
     list-style: none;
 }
+.fixd{
+    position: fixed;
+    width: 60%;
+    top: 90%;
+    z-index: 2;
+    background-color: brown;
+    padding-bottom: 10em;
+    padding-top: 20px;
+}
 
 nav ul li a{
     text-decoration: none;
+}
+
+.abs{
+    position: absolute !important;
+    border-style: none;
+    padding: 4px;
+    background-color: orangered;
+    border-radius: 3px;
+    outline: none;
     color: white;
 }

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from flask_socketio import SocketIO, join_room
+from flask_socketio import SocketIO, join_room, send
 
 app = Flask(__name__)
 
@@ -38,9 +38,17 @@ def logout():
         return redirect(url_for('login'))
 
 
-@socketio.on('handle')
-def check_connection():
-    pass
+@socketio.on('my event')
+def check_connection(data):
+    app.logger.info(data)
+    send(
+        {
+            'message': data['message'],
+            'name': data['name']
+        }
+        ,
+        broadcast=True
+    )
 
 
 @socketio.on('done')

@@ -1,22 +1,36 @@
 {% extends 'base.html'%}
 {% block body%}
-    <section>
-        <div class="container1">
-             <ul>
-                 <li><a href="">medical health</a></li>
-                 <li><a href="">sta 1.2</a></li>
-                 <li><a href="">bsc 1.2</a></li>
-             </ul>
-            <a href="">add room</a>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <button><span class="fa fa-plus-circle"></span> add group</button>
         </div>
-        <div class="container">
-            <div class="messages">
-                   <p>hello {{name}}</p>
+        <div class="col-lg-6">
+            <p class="text text-danger">hello {{name}}</p>
+            <div class="row fixd">
+                <div class="col-lg-8">
+                    <input type="text" class="form-control form-control-sm w-100" autocomplete="off" placeholder="Type your message here ...">
+                </div>
+                <div class="col-lg-4">
+                    <span><button class="abs ml-0">send message</button></span>
+                </div>
             </div>
-            <form id="form">
-                <input type="text" placeholder="Type Your Message Here ..." autofocus="true">
-                <input type="submit" value="send message">
-            </form>
         </div>
-    </section>
+    </div>
+</div>
 {%endblock body%}
+
+{% block scripts%}
+<script src="{{url_for('static', filename='js/main.js')}}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+    socket.on('connect', function() {
+    socket.emit('my event', {
+          message: 'I am connected!',
+          name: '{{name}}'
+    });
+  });
+</script>
+{% endblock scripts%}
+
