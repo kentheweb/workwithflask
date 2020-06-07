@@ -1,3 +1,5 @@
 env/
 #the pycache files should not be included
 __pycache__
+
+.sqlite

@@ -1,10 +1,34 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, make_response
 from flask_socketio import SocketIO, join_room
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+import hashlib
 
 app = Flask(__name__)
 
+
 app.config['SECRET_KEY'] = 'LUMULI'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////app.sqlite'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SQLALCHEMY_ECHO'] = True
+
 socketio = SocketIO(app)
+db = SQLAlchemy(app)
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    email = db.Column(db.String(200), nullable=False)
+    hash = db.Column(db.String(200), nullable=False)
+
+    def __repr__(self):
+        return 'name %s' % self.name
+
+
+def generate_hash(email):
+    url = hashlib.md5(email).hexdigest()
+    return url
 
 
 @app.route('/home')
@@ -63,17 +87,14 @@ def search():
 @socketio.on('my event')
 def check_connection(data):
     app.logger.info(data)
+    join_room(data['message'])
     socketio.emit('server', data)
 
 
-@socketio.on('join room')
-def done(data):
-    join_room(room=data['room'])
-
-
 @socketio.on('receive message')
-def recvmsg(data):
-    app.logger.info(data)
+def handle_message(data):
+    app.logger.debug(data)
+    socketio.emit('receive', data)
 
 
 if __name__ == '__main__':

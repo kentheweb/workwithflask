@@ -24,10 +24,11 @@
         </div>
         <div class="col-lg-6">
             <div class="details">
-                <h4 class="text text-uppercase">{{details}}</h4>
-                <img src="https:www.secure.gravatar.com/hash/?s=256&r=g&d=monsterid" alt="your profile">
+                <img src="https://www.gravatar.com/avatar/c4e3aa1b2989fba69cce45a3c6a32602/?s=80&d=monsterid" alt="" class="rounded-circle">
+            <p>{{details}}</p>
             </div>
             <div class="mess">
+                <p id="sender">@</p>
             </div>
             <form>
                 <div class="row fixd">
@@ -48,56 +49,67 @@
 {% block scripts%}
 <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf-8">
-    var socket = io();
-    socket.on('connect', function() {
-        socket.emit('my event', {
-            message: 'hello {{name}} is connected'
-        })
-    });
+var socket = io();
+socket.on('connect', function() {
+       socket.emit('my event', {
+       message: '{{details}}'
+      })
+});
 
-    socket.on('server', function(data){
-        const button = document.querySelector('#button');
-        button.addEventListener('click', function(event){
-            event.preventDefault()
-            let msg = document.querySelector('#msg');
-            let disp = document.querySelector('.mess');
-            var div = document.createElement('div');
-            div.innerHTML = msg.value ;
-            disp.appendChild(div);
-            console.log(data);
-            socket.emit('receive message',{
-                  message : `${msg.value}`,
-                  sender : '{{identify}}'
-            })
-            msg.focus()
-            msg.value = ''
-        })
-    });
+socket.on('server', function(data){
+       console.log(data)
+       var button = document.querySelector('#button').addEventListener('click', (event)=>{
+           event.preventDefault();
+           let msg = document.querySelector('#msg');
+           socket.emit('receive message',{
+                        message : `${msg.value}`,
+                        sender : '{{identify}}',
+                        room : '{{identify}}'
+                  });
+           msg.focus();
+           msg.value = '';
+       })
+});
 
+socket.on('receive', (data) =>{
+    var sender = document.querySelector('.mess');
+    var div = document.createElement('div');
+    var sen = document.querySelector('#sender');
+    sen.innerHTML = `@ ${data.sender}`;
+    div.innerHTML = data.message;
+    sender.appendChild(div);
+})
 </script>
 <script>
-var name = document.querySelector('#name');
+var gpname = document.querySelector('#name');
 var desc = document.querySelector('#desc');
-var creator = '{{identify}}';
+var creator = '{{details}}';
+
 
 var values = {
-    groupname : name,
-    description : desc,
+    groupname : gpname.value,
+    description : desc.value,
     groupcreator : creator
 };
 const btn = document.querySelector('#sbt');
 const path = `${window.origin}/register/group`;
 btn.addEventListener('click', (evt)=>{
-    evt.preventDefault()
-    alert('the button is working')
-});
-fetch(path, {
+    evt.preventDefault();
+    fetch(path, {
     method: 'POST',
     credentials: 'include',
-    body: JSON.Stringify(values),
-    cache: 'no cache'
-}).then(function(response){
-    console.log(response);
+    body: JSON.stringify(values),
+    cache: "no-cache",
+    headers: new Headers({
+            "content-type": 'application/json'
+        })
+    }).then((response) => {
+        if (response.status !== 200){
+            console.log(`hello {{details}} there was an invalid response : ${response.status}`)
+        }else{
+            console.log(response);
+        }
+    })
 });
 </script>
 {% endblock scripts%}
