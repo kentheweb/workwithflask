@@ -1,0 +1,103 @@
+{% extends 'base.html'%}
+{%block body%}
+<div class="container one">
+    <div class="row">
+        <div class="col-lg-6">
+            <form action="">
+                <div class="form-group">
+                    <label for="name">enter group name</label>
+                    <input type="text" class="form-control form-control-sm" id="name">
+                </div>
+                <div class="form-group">
+                    <label for="description">give a description about your group</label>
+                    <textarea name="desc" id="desc" cols="30" rows="10" class="form-control form-control-sm"></textarea>
+                </div>
+                <input type="submit" value="register group" class="abs" id="sbt">
+            </form>
+            <div class="container">
+                <h6 class="text text-capitalize mt-lg-5">join group</h6>
+                <ul class="ml-5">
+                    <li><a href="">STA 122</a></li>
+                    <li><a href="">STA 234</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="details">
+                <h4 class="text text-uppercase">{{details}}</h4>
+                <img src="https:www.secure.gravatar.com/hash/?s=256&r=g&d=monsterid" alt="your profile">
+            </div>
+            <div class="mess">
+            </div>
+            <form>
+                <div class="row fixd">
+                    <div class="col-lg-8">
+                        <input type="text" id="msg" class="form-control form-control-sm w-100" autocomplete="off" placeholder="Type your message here ...">
+                    </div>
+                    <div class="col-lg-4">
+                        <span><button class="abs ml-0" id="button" type="submit"><span class="fa fa-paper-plane"></span>send message</button></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{%endblock body%}
+
+{% block scripts%}
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+    socket.on('connect', function() {
+        socket.emit('my event', {
+            message: 'hello {{name}} is connected'
+        })
+    });
+
+    socket.on('server', function(data){
+        const button = document.querySelector('#button');
+        button.addEventListener('click', function(event){
+            event.preventDefault()
+            let msg = document.querySelector('#msg');
+            let disp = document.querySelector('.mess');
+            var div = document.createElement('div');
+            div.innerHTML = msg.value ;
+            disp.appendChild(div);
+            console.log(data);
+            socket.emit('receive message',{
+                  message : `${msg.value}`,
+                  sender : '{{identify}}'
+            })
+            msg.focus()
+            msg.value = ''
+        })
+    });
+
+</script>
+<script>
+var name = document.querySelector('#name');
+var desc = document.querySelector('#desc');
+var creator = '{{identify}}';
+
+var values = {
+    groupname : name,
+    description : desc,
+    groupcreator : creator
+};
+const btn = document.querySelector('#sbt');
+const path = `${window.origin}/register/group`;
+btn.addEventListener('click', (evt)=>{
+    evt.preventDefault()
+    alert('the button is working')
+});
+fetch(path, {
+    method: 'POST',
+    credentials: 'include',
+    body: JSON.Stringify(values),
+    cache: 'no cache'
+}).then(function(response){
+    console.log(response);
+});
+</script>
+{% endblock scripts%}

@@ -2,9 +2,6 @@
     box-sizing: border-box;
     padding: 0px;
     margin: 0px;
-    font-family: Old English Text MT;
-    font-size: 17px;
-    letter-spacing: 1px;
 }
 
 nav{
@@ -42,4 +39,21 @@ nav ul li a{
     border-radius: 3px;
     outline: none;
     color: white;
+}
+
+.one{
+    font-family: san-serif;
+}
+
+ul a{
+    text-decoration: none !important;
+}
+ul{
+    list-style: none;
+}
+
+.details{
+    background-color: transparent;
+    width: 100%;
+    padding: 10px;
 }

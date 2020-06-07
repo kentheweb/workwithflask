@@ -1,36 +1,73 @@
 {% extends 'base.html'%}
 {% block body%}
-<div class="container">
+<div class="container one">
     <div class="row">
         <div class="col-lg-6">
-            <button><span class="fa fa-plus-circle"></span> add group</button>
+            <form action="">
+                <div class="form-group">
+                    <label for="name">enter group name</label>
+                    <input type="text" class="form-control form-control-sm" id="name">
+                </div>
+                <div class="form-group">
+                    <label for="description">give a description about your group</label>
+                    <textarea name="desc" id="desc" cols="30" rows="10" class="form-control form-control-sm desc"></textarea>
+                </div>
+                <input type="submit" value="register group" class="abs" id="sbt">
+            </form>
+            <div class="container">
+                <h6 class="text text-capitalize mt-lg-5">join group</h6>
+                <ul class="ml-5">
+                    <li><a href="">STA 122</a></li>
+                    <li><a href="">STA 234</a></li>
+                </ul>
+            </div>
         </div>
         <div class="col-lg-6">
             <p class="text text-danger">hello {{name}}</p>
-            <div class="row fixd">
-                <div class="col-lg-8">
-                    <input type="text" class="form-control form-control-sm w-100" autocomplete="off" placeholder="Type your message here ...">
+            <a href="">stat new conversation</a>
+            <form action="{{url_for('search')}}">
+                <div class="form-group">
+                    <input type="search" class="form-control form-control-sm" name="search">
                 </div>
-                <div class="col-lg-4">
-                    <span><button class="abs ml-0">send message</button></span>
-                </div>
-            </div>
+                <button type="submit" class="abs">search users</button>
+            </form>
         </div>
     </div>
 </div>
 {%endblock body%}
 
 {% block scripts%}
-<script src="{{url_for('static', filename='js/main.js')}}"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
-<script type="text/javascript" charset="utf-8">
-    var socket = io();
-    socket.on('connect', function() {
-    socket.emit('my event', {
-          message: 'I am connected!',
-          name: '{{name}}'
-    });
-  });
+<script>
+var gpname = document.querySelector('#name');
+var desc = document.querySelector('.desc');
+var creator = '{{name}}';
+
+
+var values = {
+    groupname : gpname.value,
+    description : desc.value,
+    groupcreator : creator
+};
+const btn = document.querySelector('#sbt');
+const path = `${window.origin}/register/group`;
+btn.addEventListener('click', (evt)=>{
+    evt.preventDefault();
+    fetch(path, {
+    method: 'POST',
+    credentials: 'include',
+    body: JSON.stringify(values),
+    cache: "no-cache",
+    headers: new Headers({
+            "content-type": 'application/json'
+        })
+    }).then((response) => {
+        if (response.status !== 200){
+            console.log(`hello {{name}} there was an invalid response : ${response.status}`)
+        }else{
+            console.log(response);
+        }
+    })
+});
 </script>
 {% endblock scripts%}
 
