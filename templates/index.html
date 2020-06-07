@@ -3,14 +3,14 @@
 <div class="container one">
     <div class="row">
         <div class="col-lg-6">
-            <form action="">
+            <form>
                 <div class="form-group">
                     <label for="name">enter group name</label>
-                    <input type="text" class="form-control form-control-sm" id="name">
+                    <input type="text" class="form-control form-control-sm" id="groupname">
                 </div>
                 <div class="form-group">
                     <label for="description">give a description about your group</label>
-                    <textarea name="desc" id="desc" cols="30" rows="10" class="form-control form-control-sm desc"></textarea>
+                    <textarea id="groupdescription" cols="30" rows="10" class="form-control form-control-sm"></textarea>
                 </div>
                 <input type="submit" value="register group" class="abs" id="sbt">
             </form>
@@ -25,6 +25,11 @@
         <div class="col-lg-6">
             <p class="text text-danger">hello {{name}}</p>
             <a href="">stat new conversation</a>
+            <ul>
+                {% for user in user%}
+                    <li><a href="{{url_for('converse', id=user.id)}}" class="text text-capitalize text-dark ml-lg-5">{{user.name}}</a></li>
+                {%endfor%}
+            </ul>
             <form action="{{url_for('search')}}">
                 <div class="form-group">
                     <input type="search" class="form-control form-control-sm" name="search">
@@ -38,16 +43,17 @@
 
 {% block scripts%}
 <script>
-var gpname = document.querySelector('#name');
-var desc = document.querySelector('.desc');
+var detail = document.querySelector('#groupname').value;
+var description = document.querySelector('#groupdescription').value;
 var creator = '{{name}}';
 
 
 var values = {
-    groupname : gpname.value,
-    description : desc.value,
+    groupname : detail,
+    gpdescription : description,
     groupcreator : creator
 };
+
 const btn = document.querySelector('#sbt');
 const path = `${window.origin}/register/group`;
 btn.addEventListener('click', (evt)=>{

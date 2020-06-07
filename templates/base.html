@@ -12,12 +12,12 @@
         <ul>
             {%if not 'email' in session%}
             <li><a href="{{ url_for('login')}}" class="nav-link text-dark">login</a></li>
+            <li><a href="{{ url_for('register')}}" class="nav-link text-dark">register</a></li>
             {%else%}
             <li><a href="{{ url_for('logout')}}" class="nav-link text-dark">logout</a></li>
-            {%endif%}
             <li><a href="{{url_for('home')}}" class="nav-link text-dark">Home</a></li>
-            <li><a href="" class="nav-link text-dark">About</a></li>
-            <li><a href="" class="nav-link text-dark">Services</a></li>
+            <li><a href="{{ url_for('account')}}" class="nav-link text-dark">Account</a></li>
+            {%endif%}
         </ul>
     </nav>
     {% block body%}

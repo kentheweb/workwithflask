@@ -18,6 +18,10 @@
             {%endwith%}
             <form method="post">
                 <div class="form-group">
+                    <label for="name">enter your name</label>
+                    <input type="text" class="form-control form-control-sm" name="name" required autocomplete="off">
+                </div>
+                <div class="form-group">
                     <label for="email">enter your email</label>
                     <input type="email" class="form-control form-control-sm" required name="email" autocomplete="off">
                 </div>
@@ -25,9 +29,9 @@
                     <label for="password">enter your password</label>
                     <input type="password" class="form-control form-control-sm" required name="password" autocomplete="off">
                 </div>
-                <input type="submit" value="login" class="btn btn-danger">
+                <input type="submit" value="register" class="btn btn-danger">
             </form>
-            <small>do not have an account ? <a href="{{url_for('register')}}" class="text-decoration-none"> sign up </a></small>
+            <small>already have an account ? <a href="{{url_for('login')}}" class="text-decoration-none"> sign in </a></small>
         </div>
         <div class="col-lg-3">
 
