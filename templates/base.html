@@ -11,12 +11,12 @@
     <nav>
         <ul>
             {%if not 'email' in session%}
-            <li><a href="{{ url_for('login')}}" class="nav-link text-dark">login</a></li>
-            <li><a href="{{ url_for('register')}}" class="nav-link text-dark">register</a></li>
+            <li><a href="{{ url_for('login')}}" class="nav-link text-light">Login</a></li>
+            <li><a href="{{ url_for('register')}}" class="nav-link text-light">Register</a></li>
             {%else%}
-            <li><a href="{{ url_for('logout')}}" class="nav-link text-dark">logout</a></li>
-            <li><a href="{{url_for('home')}}" class="nav-link text-dark">Home</a></li>
-            <li><a href="{{ url_for('account')}}" class="nav-link text-dark">Account</a></li>
+            <li><a href="{{ url_for('logout')}}" class="nav-link text-light">Logout</a></li>
+            <li><a href="{{url_for('home')}}" class="nav-link text-light">Home</a></li>
+            <li><a href="{{ url_for('account')}}" class="nav-link text-light">Account</a></li>
             {%endif%}
         </ul>
     </nav>

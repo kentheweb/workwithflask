@@ -6,7 +6,6 @@ import hashlib
 
 app = Flask(__name__)
 
-
 app.config['SECRET_KEY'] = 'LUMULI'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -27,13 +26,14 @@ class User(db.Model):
         return 'name %s' % self.name
 
 
-class Group(db.Model):
+class Messages(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(250), nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    room = db.Column(db.Integer)
+    sender = db.Column(db.String(250), nullable=False)
+    message = db.Column(db.Text, nullable=False)
 
     def __repr__(self):
-        return 'name %s' % self.name
+        return 'name %s' % self.id
 
 
 def generate_hash(email):
@@ -102,27 +102,14 @@ def logout():
         return redirect(url_for('login'))
 
 
-@app.route('/register/group', methods=['POST'])
-def register_group():
-    data = request.get_json()
-    app.logger.info(data)
-    return make_response(jsonify({
-        'message': 'group created successfully'
-    }))
-
-
 @app.route('/start/conversation/<int:id>')
 def converse(id):
     user = User.query.get_or_404(id)
     details = user.name
     identify = session['username']
-    return render_template('converse.html', details=details, identify=identify)
-
-
-@app.route('/search')
-def search():
-    name = request.args.get('search')
-    return name
+    user = User.query.filter_by(name=identify).first()
+    msg = Messages.query.filter_by().all()
+    return render_template('converse.html', details=details, user=user, msg=msg)
 
 
 @app.route('/account')
@@ -137,14 +124,19 @@ def account():
 
 @socketio.on('my event')
 def check_connection(data):
-    app.logger.info(data)
-    join_room(data['message'])
-    socketio.emit('server', data)
+    join_room(data['room'])
+    socketio.emit('server', data, room=data['room'])
 
 
 @socketio.on('receive message')
 def handle_message(data):
     app.logger.debug(data)
+    msg = data['message']
+    sender = data['sender']
+    room = data['room']
+    item = Messages(sender=sender, message=msg, room=room)
+    db.session.add(item)
+    db.session.commit()
     socketio.emit('receive', data)
 
 

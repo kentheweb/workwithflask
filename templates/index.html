@@ -17,8 +17,9 @@
             <div class="container">
                 <h6 class="text text-capitalize mt-lg-5">join group</h6>
                 <ul class="ml-5">
-                    <li><a href="">STA 122</a></li>
-                    <li><a href="">STA 234</a></li>
+                    {% for group in all_groups%}
+                    <li><a href="" class="text text-dark">{{group.name}}</a></li>
+                    {%endfor%}
                 </ul>
             </div>
         </div>
@@ -30,12 +31,6 @@
                     <li><a href="{{url_for('converse', id=user.id)}}" class="text text-capitalize text-dark ml-lg-5">{{user.name}}</a></li>
                 {%endfor%}
             </ul>
-            <form action="{{url_for('search')}}">
-                <div class="form-group">
-                    <input type="search" class="form-control form-control-sm" name="search">
-                </div>
-                <button type="submit" class="abs">search users</button>
-            </form>
         </div>
     </div>
 </div>

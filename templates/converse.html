@@ -1,45 +1,46 @@
 {% extends 'base.html'%}
 {%block body%}
-<div class="container one">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-lg-6">
-            <form action="">
-                <div class="form-group">
-                    <label for="name">enter group name</label>
-                    <input type="text" class="form-control form-control-sm" id="name">
-                </div>
-                <div class="form-group">
-                    <label for="description">give a description about your group</label>
-                    <textarea name="desc" id="desc" cols="30" rows="10" class="form-control form-control-sm"></textarea>
-                </div>
-                <input type="submit" value="register group" class="abs" id="sbt">
-            </form>
-            <div class="container">
-                <h6 class="text text-capitalize mt-lg-5">join group</h6>
-                <ul class="ml-5">
-                    <li><a href="">STA 122</a></li>
-                    <li><a href="">STA 234</a></li>
-                </ul>
-            </div>
+        <div class="col-lg-2 one">
+            <h6 class="text text-light text-uppercase">active members</h6>
+            <ul class="ml-lg-5">
+                <li>
+                    <a href="" id="members"></a>
+                </li>
+            </ul>
         </div>
-        <div class="col-lg-6">
-            <div class="details">
-                <img src="https://www.gravatar.com/avatar/c4e3aa1b2989fba69cce45a3c6a32602/?s=80&d=monsterid" alt="" class="rounded-circle">
-            <p>{{details}}</p>
-            </div>
-            <div class="mess">
-                <p id="sender">@</p>
-            </div>
+        <div class="col-lg-8 two">
+
+                {% for msg in msg%}
+                    {% if msg.sender == user.name%}
+                <div class="mess">
+                    <small class="sender">{{msg.sender}}</small>
+                    <br>
+                    {{msg.message}}
+                </div>
+                    {%else%}
+                <div class="receive">
+                    <small>{{msg.sender}}</small>
+                    <br>
+                    {{msg.message}}
+                </div>
+                    {% endif %}
+                {% endfor %}
+
             <form>
                 <div class="row fixd">
                     <div class="col-lg-8">
                         <input type="text" id="msg" class="form-control form-control-sm w-100" autocomplete="off" placeholder="Type your message here ...">
                     </div>
                     <div class="col-lg-4">
-                        <span><button class="abs ml-0" id="button" type="submit"><span class="fa fa-paper-plane"></span>send message</button></span>
+                        <span><button class="abs ml-0" id="button" type="submit"><span class="fa fa-paper-plane"></span> send message</button></span>
                     </div>
                 </div>
             </form>
+        </div>
+        <div class="col-lg-2 three">
+
         </div>
     </div>
 </div>
@@ -52,19 +53,20 @@
 var socket = io();
 socket.on('connect', function() {
        socket.emit('my event', {
-       message: '{{details}}'
+       message: '{{user.name}}',
+       room: '{{user.id}}'
       })
 });
 
 socket.on('server', function(data){
-       console.log(data)
+       document.querySelector('#members').innerHTML = data.message;
        var button = document.querySelector('#button').addEventListener('click', (event)=>{
            event.preventDefault();
            let msg = document.querySelector('#msg');
            socket.emit('receive message',{
                         message : `${msg.value}`,
-                        sender : '{{identify}}',
-                        room : '{{identify}}'
+                        sender : '{{user.name}}',
+                        room : '{{user.id}}'
                   });
            msg.focus();
            msg.value = '';
@@ -72,44 +74,7 @@ socket.on('server', function(data){
 });
 
 socket.on('receive', (data) =>{
-    var sender = document.querySelector('.mess');
-    var div = document.createElement('div');
-    var sen = document.querySelector('#sender');
-    sen.innerHTML = `@ ${data.sender}`;
-    div.innerHTML = data.message;
-    sender.appendChild(div);
+    console.log(data)
 })
-</script>
-<script>
-var gpname = document.querySelector('#name');
-var desc = document.querySelector('#desc');
-var creator = '{{details}}';
-
-
-var values = {
-    groupname : gpname.value,
-    description : desc.value,
-    groupcreator : creator
-};
-const btn = document.querySelector('#sbt');
-const path = `${window.origin}/register/group`;
-btn.addEventListener('click', (evt)=>{
-    evt.preventDefault();
-    fetch(path, {
-    method: 'POST',
-    credentials: 'include',
-    body: JSON.stringify(values),
-    cache: "no-cache",
-    headers: new Headers({
-            "content-type": 'application/json'
-        })
-    }).then((response) => {
-        if (response.status !== 200){
-            console.log(`hello {{details}} there was an invalid response : ${response.status}`)
-        }else{
-            console.log(response);
-        }
-    })
-});
 </script>
 {% endblock scripts%}

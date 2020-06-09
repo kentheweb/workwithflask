@@ -2,11 +2,12 @@
     box-sizing: border-box;
     padding: 0px;
     margin: 0px;
+    font-family : san-serif;
 }
 
 nav{
     height:10vh;
-    background-color: green;
+    background-color: maroon;
 }
 
 nav ul{
@@ -18,17 +19,16 @@ nav ul{
     list-style: none;
 }
 .fixd{
-    position: fixed;
-    width: 60%;
-    top: 90%;
-    z-index: 2;
+    position: absolute;
+    width: 100%;
+    top: 80vh;
     background-color: brown;
-    padding-bottom: 10em;
-    padding-top: 20px;
+    z-index: 2;
 }
 
 nav ul li a{
     text-decoration: none;
+    color: white !important;
 }
 
 .abs{
@@ -42,18 +42,42 @@ nav ul li a{
 }
 
 .one{
-    font-family: san-serif;
+    background-color: black;
 }
 
-ul a{
-    text-decoration: none !important;
+.two{
+    background-color: transparent;
 }
-ul{
-    list-style: none;
+
+.three{
+    background-color: black;
+    height: 90vh;
+    padding-left: 10px !important;
 }
 
 .details{
     background-color: transparent;
     width: 100%;
     padding: 10px;
+}
+
+.mess{
+    background-color: lightgreen;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 60%;
+    padding: 2em;
+}
+.sender{
+    width: 100%;
+}
+
+.receive{
+    background-color: magenta;
+    width: 60%;
+    border-radius: 5px;
+    margin-left: auto;
+    padding: 2em;
+    margin-bottom: 10px;
 }
